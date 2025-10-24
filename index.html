@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contract Management API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    .contract-form, .contract-list {
+      background: #fff;
+      padding: 1em;
+      margin-bottom: 2em;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 0.5em;
+      margin: 0.5em 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .contract-item {
+      border-bottom: 1px solid #ddd;
+      padding: 0.5em 0;
+    }
+    .contract-item:last-child {
+      border-bottom: none;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 0.3em 0.6em;
+      cursor: pointer;
+      float: right;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contract Management</h1>
+
+  <div class="contract-form">
+    <h2>Create Contract</h2>
+    <input type="text" id="contractTitle" placeholder="Contract Title" />
+    <input type="text" id="contractClient" placeholder="Client Name" />
+    <button onclick="createContract()">Add Contract</button>
+  </div>
+
+  <div class="contract-list">
+    <h2>Contracts</h2>
+    <div id="contractsContainer"></div>
+  </div>
+
+  <script>
+    let contracts = [];
+
+    function renderContracts() {
+      const container = document.getElementById('contractsContainer');
+      container.innerHTML = '';
+      contracts.forEach((contract, index) => {
+        const div = document.createElement('div');
+        div.className = 'contract-item';
+        div.innerHTML = `
+          <strong>${contract.title}</strong> - ${contract.client}
+          <button class="delete-btn" onclick="deleteContract(${index})">Delete</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function createContract() {
+      const title = document.getElementById('contractTitle').value;
+      const client = document.getElementById('contractClient').value;
+      if (title && client) {
+        contracts.push({ title, client });
+        renderContracts();
+        document.getElementById('contractTitle').value = '';
+        document.getElementById('contractClient').value = '';
+      } else {
+        alert('Please fill in both fields.');
+      }
+    }
+
+    function deleteContract(index) {
+      contracts.splice(index, 1);
+      renderContracts();
+    }
+
+    // Simulate initial fetch
+    window.onload = () => {
+      contracts = [
+        { title: 'Website Development', client: 'Acme Corp' },
+        { title: 'Mobile App Design', client: 'Globex Inc' }
+      ];
+      renderContracts();
+    };
+  </script>
+</body>
+</html>
